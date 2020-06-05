@@ -9,3 +9,9 @@ python -m venv env/token-lookup
 .\env\token-lookup\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
+
+```bash
+python3 -m venv env/token-lookup
+source env/token-lookup/bin/activate`
+pip install -r requirements.txt
+```
