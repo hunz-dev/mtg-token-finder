@@ -1,7 +1,5 @@
-from peewee import SqliteDatabase, Model
-
-
-database = SqliteDatabase('scryfall.db')
+from peewee import Model
+from . import database
 
 
 # Create a base-class all models will inherit
