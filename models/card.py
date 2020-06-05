@@ -13,5 +13,5 @@ class Card(BaseModel):
     type_line = CharField()
     oracle_text = CharField()
     colors = CharField()
-    set = CharField()
+    set_code = CharField()
     artist = CharField()
