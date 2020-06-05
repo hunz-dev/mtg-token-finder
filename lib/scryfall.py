@@ -10,4 +10,4 @@ def get_card_exact(card_name):
     url = SCRYFALL_URL.format(path="cards/named")
     params = dict(exact=card_name)
     response = requests.get(url, params)
-    return response
+    return response.json()
