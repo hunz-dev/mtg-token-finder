@@ -1,6 +1,9 @@
 from typing import Dict
-from lib import scryfall
+from lib import scryfall, logging
 from models import Card
+
+
+log = logging.get(name='card_service')
 
 
 def create_card(card_json: Dict) -> Card:
@@ -19,10 +22,11 @@ def create_card(card_json: Dict) -> Card:
 
 # TODO: debug logs if we have to fetch from Scryfall
 def get_card(card_name: str) -> Card:
-    card = Card.get(Card.name == card_name)
-
-    if card is None:
-        card_json = scryfall.get_exact_name(card_name)
+    try:
+        card = Card.get(Card.name == card_name)
+    except Card.DoesNotExist:
+        log.debug('Card not found, searching Scryfall')
+        card_json = scryfall.get_card_exact(card_name)
         card = create_card(card_json)
-    
+
     return card
