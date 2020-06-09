@@ -6,6 +6,7 @@ from service.namedtuples import Deck
 
 
 DECKS_FILE = "decks.yml"
+OUTPUT_FILE = "out/tokens.xlsx"
 log = logging.get('token-lookup')
 
 
@@ -17,9 +18,8 @@ def check_deck(deck: Deck):
     cards = [cards_service.get_card(name) for name in card_names]
     token_cards = [card for card in cards if card and card.is_token_maker]
 
-    log.info("Found the following cards that use the word 'token':")
-    for card in token_cards:
-        log.info("%s:\n%s", card.name, card.oracle_text)
+    log.info(f"Writing results for [{deck.name}] to [{OUTPUT_FILE}]")
+    cards_service.write_to_workbook(deck.name, token_cards, OUTPUT_FILE)
 
 
 def main():

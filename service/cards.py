@@ -1,5 +1,6 @@
-from typing import Dict
+from typing import Dict, List
 import peewee
+from openpyxl import Workbook, load_workbook
 from lib import scryfall, logging
 from models import Card
 
@@ -34,3 +35,25 @@ def get_card(card_name: str) -> Card:
         card = create_card(card_json)
 
     return card
+
+
+# TODO: Auto-size columns
+def write_to_workbook(deck_name: str, cards: List[Card], path: str) -> None:
+    try:
+        workbook = load_workbook(filename=path)
+    except FileNotFoundError:
+        log.info("File not found, creating new one")
+        workbook = Workbook()
+
+        # Remove default worksheet
+        worksheet = workbook.active
+        workbook.remove(worksheet)
+
+    worksheet = workbook.create_sheet(title=deck_name)
+
+    for idx, card in enumerate(cards):
+        worksheet.cell(row=idx+1, column=1, value=card.name)
+        worksheet.cell(row=idx+1, column=2, value=card.token_type)
+        worksheet.cell(row=idx+1, column=3, value=card.oracle_text)
+
+    workbook.save(filename=path)
