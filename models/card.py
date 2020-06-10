@@ -16,12 +16,8 @@ class Card(BaseModel):
     artist = CharField()
 
     @property
-    def is_token_maker(self):
-        return 'token' in self.oracle_text.lower()
-
-    # TODO: Only match a single word before "creature" and make it non-greedy
-    @property
     def token_type(self):
-        expression = re.compile(r"[cC]reate [a-z]* (.*) creature token")
-        match = expression.search(self.oracle_text)
-        return match.group(1) if match else None
+        expression = r"([\d]+\/[\d]+.*?creature\stoken)\s?(with\s[a-z]+)?"
+        matches = re.finditer(expression, self.oracle_text)
+        tokens = ', '.join([match.group(0) for match in matches])
+        return tokens if len(tokens) > 0 else None
